@@ -27,6 +27,7 @@ def get_vectorstore_from_url(url):
     vector_store = Chroma.from_documents(document_chunks, OpenAIEmbeddings())
 
     return vector_store
+   
 
 def get_context_retriever_chain(vector_store):
     llm = ChatOpenAI(model_name="gpt-4o")
@@ -88,35 +89,42 @@ with st.sidebar:
         button=st.form_submit_button("Create MCQs")
 
 
-if button and not website_url.startswith("http://") and website_url is not None and mcq_count and subject and tone:
+if button and website_url is not None and mcq_count and subject and tone:
     with st.spinner("loading..."):
-        # session state
-        if "chat_history" not in st.session_state:
-            st.session_state.chat_history = [
-                AIMessage(content="Hello, I am a bot. How can I help you?"),
-            ]
-        if "vector_store" not in st.session_state:
-            st.session_state.vector_store = get_vectorstore_from_url(website_url)    
+        try:
+            # session state
+            if "chat_history" not in st.session_state:
+                st.session_state.chat_history = None
+                st.session_state['chat_history'] = None
+                st.session_state.chat_history = [
+                    AIMessage(content="Hello, I am a bot. How can I help you?"),
+                ]
+            if "vector_store" not in st.session_state:
+                st.session_state.vector_store = None
+                st.session_state['vector_store'] = None
+                st.session_state.vector_store = get_vectorstore_from_url(website_url)    
 
-        # user input
-        user_query = f"Create {mcq_count} mcq for {subject} and tone is {tone} and give me correct answer"
-        #st.chat_input("Create 30 mcq")
-        if user_query is not None and user_query != "":
-            response = get_response(user_query)
-            st.session_state.chat_history.clear()
-            st.session_state.chat_history.append(HumanMessage(content=user_query))
-            st.session_state.chat_history.append(AIMessage(content=response))
+            # user input
+            user_query = f"Create {mcq_count} mcq for {subject} and tone is {tone} and give me correct answer"
+            #st.chat_input("Create 30 mcq")
+            if user_query is not None and user_query != "":
+                response = get_response(user_query)
+                st.session_state.chat_history.clear()
+                st.session_state.chat_history.append(HumanMessage(content=user_query))
+                st.session_state.chat_history.append(AIMessage(content=response))
+                
             
-        
 
-        # conversation
-        for message in st.session_state.chat_history:
-            if isinstance(message, AIMessage):
-                with st.chat_message("AI"):
-                    st.write(message.content)
-            elif isinstance(message, HumanMessage):
-                with st.chat_message("Human"):
-                    st.write(message.content)
+            # conversation
+            for message in st.session_state.chat_history:
+                if isinstance(message, AIMessage):
+                    with st.chat_message("AI"):
+                        st.write(message.content)
+                elif isinstance(message, HumanMessage):
+                    with st.chat_message("Human"):
+                        st.write(message.content)
+        except Exception as e:
+            st.error("Please provide valid URL and refresh the page again")
 
 
 
