@@ -120,6 +120,5 @@ if button and website_url is not None and mcq_count and subject and tone:
 
 
 
-
-
-    
+footer = """<style>.footer {position: fixed;left: 0;bottom: 0;width: 100%;background-color: #000;color: white;text-align: center;}</style><div class='footer'><p>Copyright 2023, feel free to contact leodeveloper@gmail.com</p></div>"""
+st.markdown(footer, unsafe_allow_html=True)
