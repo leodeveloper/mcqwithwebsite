@@ -88,7 +88,7 @@ with st.sidebar:
         button=st.form_submit_button("Create MCQs")
 
 
-if button and website_url is not None and mcq_count and subject and tone:
+if button and not website_url.startswith("http://") and website_url is not None and mcq_count and subject and tone:
     with st.spinner("loading..."):
         # session state
         if "chat_history" not in st.session_state:
