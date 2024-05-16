@@ -21,5 +21,5 @@ To install the dependencies, clone the repository and run:
 ```bash
 pip install -r requirements.txt
 
-### feel free to contact on this email id leodeveloper@gmaol.com
+### feel free to contact on this email id leodeveloper@gmail.com
 
