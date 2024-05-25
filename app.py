@@ -1,6 +1,7 @@
 # pip install streamlit langchain lanchain-openai beautifulsoup4 python-dotenv chromadb
 
 import streamlit as st
+import os
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -13,6 +14,9 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 
 
 load_dotenv()
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+os.environ["LANGCHAIN_PROJECT"]=os.getenv("LANGCHAIN_PROJECT")
 
 def get_vectorstore_from_url(url):
     # get the text in document form
